@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GitHub Copilot MCP Configurator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .panel {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .panel h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+            font-size: 1.3em;
+        }
+
+        .preset-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .preset-item:hover {
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .preset-item.selected {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .preset-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .preset-header input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .preset-name {
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #333;
+        }
+
+        .preset-description {
+            margin-top: 8px;
+            padding-left: 30px;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .custom-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+        }
+
+        .custom-item {
+            background: white;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .custom-item-info {
+            flex: 1;
+        }
+
+        .custom-item-name {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .custom-item-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        button.secondary {
+            background: #6c757d;
+        }
+
+        button.secondary:hover {
+            background: #5a6268;
+        }
+
+        button.danger {
+            background: #dc3545;
+        }
+
+        button.danger:hover {
+            background: #c82333;
+        }
+
+        button.small {
+            padding: 6px 12px;
+            font-size: 0.9em;
+        }
+
+        #jsonOutput {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            overflow-x: auto;
+            white-space: pre;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            color: #333;
+            font-size: 1.5em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #e0e0e0;
+            border-radius: 6px;
+            font-size: 1em;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            font-family: 'Courier New', monospace;
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 GitHub Copilot MCP Configurator</h1>
+            <p>輕鬆管理您的 MCP (Model Context Protocol) 設定</p>
+        </header>
+
+        <div class="content">
+            <!-- Left Panel: Presets and Custom Configs -->
+            <div class="panel">
+                <h2>內建設定</h2>
+                <div id="presetList"></div>
+
+                <div class="custom-section">
+                    <h2>自訂設定</h2>
+                    <button onclick="openAddCustomModal()">+ 新增自訂設定</button>
+                    <div id="customList" style="margin-top: 15px;"></div>
+                </div>
+            </div>
+
+            <!-- Right Panel: JSON Output -->
+            <div class="panel">
+                <h2>JSON 輸出</h2>
+                <div id="jsonOutput"></div>
+                <div class="actions">
+                    <button onclick="copyToClipboard()">📋 複製到剪貼簿</button>
+                    <button onclick="exportConfig()" class="secondary">💾 匯出設定</button>
+                    <button onclick="document.getElementById('importFile').click()" class="secondary">📂 匯入設定</button>
+                    <input type="file" id="importFile" accept=".json" onchange="importConfig(event)">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add/Edit Custom Modal -->
+    <div id="customModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">新增自訂設定</h3>
+            </div>
+            <form id="customForm">
+                <div class="form-group">
+                    <label for="customName">名稱 *</label>
+                    <input type="text" id="customName" required placeholder="例如: my-custom-server">
+                </div>
+                <div class="form-group">
+                    <label for="customDescription">描述</label>
+                    <input type="text" id="customDescription" placeholder="簡短描述此設定的用途">
+                </div>
+                <div class="form-group">
+                    <label for="customConfig">設定 (JSON) *</label>
+                    <textarea id="customConfig" required placeholder='{
+  "type": "local",
+  "command": "node",
+  "args": ["server.js"],
+  "tools": ["*"]
+}'></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" onclick="closeCustomModal()" class="secondary">取消</button>
+                    <button type="submit">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Preset configurations
+        const PRESETS = [
+            {
+                id: 'playwright',
+                name: 'Playwright MCP',
+                description: '瀏覽器自動化工具，可用於網頁測試和互動',
+                config: {
+                    type: 'local',
+                    command: 'npx',
+                    args: ['@playwright/mcp@latest', '--allowed-hosts', '*'],
+                    tools: ['*']
+                }
+            }
+        ];
+
+        // State management
+        let selectedPresets = new Set();
+        let customConfigs = [];
+        let editingCustomId = null;
+
+        // Initialize
+        function init() {
+            loadState();
+            renderPresets();
+            renderCustomConfigs();
+            updateJsonOutput();
+        }
+
+        // Load state from localStorage
+        function loadState() {
+            const saved = localStorage.getItem('mcpConfig');
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    selectedPresets = new Set(data.selectedPresets || []);
+                    customConfigs = data.customConfigs || [];
+                } catch (e) {
+                    console.error('Failed to load saved state:', e);
+                }
+            }
+        }
+
+        // Save state to localStorage
+        function saveState() {
+            const data = {
+                selectedPresets: Array.from(selectedPresets),
+                customConfigs: customConfigs
+            };
+            localStorage.setItem('mcpConfig', JSON.stringify(data));
+        }
+
+        // Render preset list
+        function renderPresets() {
+            const container = document.getElementById('presetList');
+            container.innerHTML = PRESETS.map(preset => `
+                <div class="preset-item ${selectedPresets.has(preset.id) ? 'selected' : ''}" id="preset-${preset.id}">
+                    <div class="preset-header" onclick="togglePreset('${preset.id}')">
+                        <input type="checkbox" ${selectedPresets.has(preset.id) ? 'checked' : ''} onclick="event.stopPropagation(); togglePreset('${preset.id}')">
+                        <span class="preset-name">${preset.name}</span>
+                    </div>
+                    <div class="preset-description">${preset.description}</div>
+                </div>
+            `).join('');
+        }
+
+        // Toggle preset selection
+        function togglePreset(id) {
+            if (selectedPresets.has(id)) {
+                selectedPresets.delete(id);
+            } else {
+                selectedPresets.add(id);
+            }
+            saveState();
+            renderPresets();
+            updateJsonOutput();
+        }
+
+        // Render custom configs
+        function renderCustomConfigs() {
+            const container = document.getElementById('customList');
+            if (customConfigs.length === 0) {
+                container.innerHTML = '<div class="empty-state">尚無自訂設定</div>';
+                return;
+            }
+
+            container.innerHTML = customConfigs.map((config, index) => `
+                <div class="custom-item">
+                    <div class="custom-item-info">
+                        <div class="custom-item-name">${config.name}</div>
+                        ${config.description ? `<div style="font-size: 0.9em; color: #666;">${config.description}</div>` : ''}
+                    </div>
+                    <div class="custom-item-actions">
+                        <button class="small secondary" onclick="editCustom(${index})">編輯</button>
+                        <button class="small danger" onclick="deleteCustom(${index})">刪除</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Update JSON output
+        function updateJsonOutput() {
+            const mcpServers = {};
+
+            // Add selected presets
+            selectedPresets.forEach(presetId => {
+                const preset = PRESETS.find(p => p.id === presetId);
+                if (preset) {
+                    mcpServers[preset.id] = preset.config;
+                }
+            });
+
+            // Add custom configs
+            customConfigs.forEach(custom => {
+                mcpServers[custom.name] = custom.config;
+            });
+
+            const output = {
+                mcpServers: mcpServers
+            };
+
+            document.getElementById('jsonOutput').textContent = JSON.stringify(output, null, 2);
+        }
+
+        // Open add custom modal
+        function openAddCustomModal() {
+            editingCustomId = null;
+            document.getElementById('modalTitle').textContent = '新增自訂設定';
+            document.getElementById('customForm').reset();
+            document.getElementById('customModal').classList.add('show');
+        }
+
+        // Close custom modal
+        function closeCustomModal() {
+            document.getElementById('customModal').classList.remove('show');
+            editingCustomId = null;
+        }
+
+        // Edit custom config
+        function editCustom(index) {
+            editingCustomId = index;
+            const config = customConfigs[index];
+            document.getElementById('modalTitle').textContent = '編輯自訂設定';
+            document.getElementById('customName').value = config.name;
+            document.getElementById('customDescription').value = config.description || '';
+            document.getElementById('customConfig').value = JSON.stringify(config.config, null, 2);
+            document.getElementById('customModal').classList.add('show');
+        }
+
+        // Delete custom config
+        function deleteCustom(index) {
+            if (confirm('確定要刪除這個自訂設定嗎？')) {
+                customConfigs.splice(index, 1);
+                saveState();
+                renderCustomConfigs();
+                updateJsonOutput();
+            }
+        }
+
+        // Handle custom form submission
+        document.getElementById('customForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('customName').value.trim();
+            const description = document.getElementById('customDescription').value.trim();
+            const configText = document.getElementById('customConfig').value.trim();
+
+            try {
+                const config = JSON.parse(configText);
+
+                const newCustom = {
+                    name: name,
+                    description: description,
+                    config: config
+                };
+
+                if (editingCustomId !== null) {
+                    customConfigs[editingCustomId] = newCustom;
+                } else {
+                    customConfigs.push(newCustom);
+                }
+
+                saveState();
+                renderCustomConfigs();
+                updateJsonOutput();
+                closeCustomModal();
+            } catch (e) {
+                alert('JSON 格式錯誤，請檢查您的設定：\n' + e.message);
+            }
+        });
+
+        // Copy to clipboard
+        function copyToClipboard() {
+            const output = document.getElementById('jsonOutput').textContent;
+            navigator.clipboard.writeText(output).then(() => {
+                alert('已複製到剪貼簿！');
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('複製失敗，請手動複製');
+            });
+        }
+
+        // Export configuration
+        function exportConfig() {
+            const data = {
+                selectedPresets: Array.from(selectedPresets),
+                customConfigs: customConfigs
+            };
+
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'mcp-config.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        // Import configuration
+        function importConfig(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    selectedPresets = new Set(data.selectedPresets || []);
+                    customConfigs = data.customConfigs || [];
+                    saveState();
+                    renderPresets();
+                    renderCustomConfigs();
+                    updateJsonOutput();
+                    alert('匯入成功！');
+                } catch (err) {
+                    alert('匯入失敗：\n' + err.message);
+                }
+            };
+            reader.readAsText(file);
+            event.target.value = ''; // Reset file input
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('customModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeCustomModal();
+            }
+        });
+
+        // Initialize on load
+        init();
+    </script>
+</body>
+</html>
