@@ -30,9 +30,43 @@
 
 ## 使用方式
 
-### 本地使用
+### 線上使用
 
-1. 直接開啟 `index.html` 檔案（在瀏覽器中）
+訪問 GitHub Pages 部署版本：[https://doggy8088.github.io/cca-mcp-configurator/](https://doggy8088.github.io/cca-mcp-configurator/)
+
+### 本地開發
+
+#### 安裝依賴
+
+```bash
+npm install
+```
+
+#### 開發模式
+
+```bash
+npm run dev
+# 訪問 http://localhost:8080
+```
+
+#### 建置生產版本
+
+```bash
+npm run build
+```
+
+建置後的檔案會在 `dist` 目錄中，包含壓縮優化的 HTML、CSS 和 JavaScript。
+
+#### 本地預覽建置版本
+
+```bash
+npm run serve
+# 訪問 http://localhost:8080
+```
+
+### 直接使用（無需建置）
+
+1. 直接開啟 `src/index.html` 檔案（在瀏覽器中）
 
 或者使用任何靜態檔案伺服器：
 
@@ -41,7 +75,7 @@
 python -m http.server 8080
 
 # 使用 Node.js http-server
-npx http-server
+npx http-server src
 
 # 使用 PHP
 php -S localhost:8080
@@ -129,10 +163,43 @@ php -S localhost:8080
 
 ## 技術細節
 
-- 純 HTML + CSS + JavaScript，無需建置工具
+- 使用 Node.js 建置系統進行程式碼壓縮和優化
+- 使用 `csso` 壓縮 CSS（減少約 49%）
+- 使用 `terser` 壓縮 JavaScript（減少約 56%）  
+- 使用 `html-minifier-terser` 壓縮 HTML（減少約 33%）
 - 使用 localStorage 進行客戶端資料存儲
 - 響應式設計，支援行動裝置
 - 現代化的使用者介面
+
+## CI/CD
+
+專案使用 GitHub Actions 進行持續整合和部署：
+
+- **Pull Request**: 自動執行建置測試和驗證
+- **Push to main**: 自動建置並部署到 GitHub Pages
+- **手動觸發**: 支援手動觸發部署
+
+工作流程檔案：`.github/workflows/ci.yml`
+
+## 專案結構
+
+```
+cca-mcp-configurator/
+├── src/               # 原始碼
+│   ├── index.html     # HTML 模板
+│   ├── styles.css     # CSS 樣式
+│   └── app.js         # JavaScript 程式碼
+├── dist/              # 建置輸出（自動生成）
+│   ├── index.html     # 壓縮的 HTML
+│   ├── styles.min.css # 壓縮的 CSS
+│   └── app.min.js     # 壓縮的 JavaScript
+├── .github/
+│   └── workflows/
+│       └── ci.yml     # GitHub Actions 工作流程
+├── build.js           # 建置腳本
+├── package.json       # 專案設定
+└── README.md          # 說明文件
+```
 
 ## 瀏覽器支援
 

@@ -1,0 +1,19 @@
+{
+  "name": "cca-mcp-configurator",
+  "version": "1.0.0",
+  "description": "GitHub Copilot MCP Configurator",
+  "scripts": {
+    "build": "npm run build:clean && npm run build:minify",
+    "build:clean": "rm -rf dist && mkdir -p dist",
+    "build:minify": "node build.js",
+    "test": "node build.js && node -e \"console.log('Build test passed')\"",
+    "serve": "npx http-server dist -p 8080",
+    "dev": "npx http-server src -p 8080"
+  },
+  "devDependencies": {
+    "csso": "^5.0.5",
+    "html-minifier-terser": "^7.2.0",
+    "terser": "^5.36.0"
+  },
+  "type": "module"
+}
