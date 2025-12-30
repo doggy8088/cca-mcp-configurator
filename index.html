@@ -547,19 +547,52 @@
                 updateJsonOutput();
                 closeCustomModal();
             } catch (e) {
-                alert('JSON 格式錯誤，請檢查您的設定：\n' + e.message);
+                let errorMsg = 'JSON 格式錯誤';
+                if (e.message.includes('Unexpected token')) {
+                    errorMsg += '：語法錯誤，請檢查是否有缺少逗號、括號或引號';
+                } else if (e.message.includes('Unexpected end')) {
+                    errorMsg += '：JSON 不完整，請檢查是否有未關閉的括號';
+                } else {
+                    errorMsg += '：' + e.message;
+                }
+                alert(errorMsg);
             }
         });
 
         // Copy to clipboard
         function copyToClipboard() {
             const output = document.getElementById('jsonOutput').textContent;
-            navigator.clipboard.writeText(output).then(() => {
+            
+            // Try modern clipboard API first
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(output).then(() => {
+                    alert('已複製到剪貼簿！');
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    fallbackCopy(output);
+                });
+            } else {
+                // Fallback for non-secure contexts
+                fallbackCopy(output);
+            }
+        }
+
+        // Fallback copy method
+        function fallbackCopy(text) {
+            const textarea = document.createElement('textarea');
+            textarea.value = text;
+            textarea.style.position = 'fixed';
+            textarea.style.left = '-9999px';
+            document.body.appendChild(textarea);
+            textarea.select();
+            try {
+                document.execCommand('copy');
                 alert('已複製到剪貼簿！');
-            }).catch(err => {
-                console.error('Failed to copy:', err);
+            } catch (err) {
+                console.error('Fallback copy failed:', err);
                 alert('複製失敗，請手動複製');
-            });
+            }
+            document.body.removeChild(textarea);
         }
 
         // Export configuration
@@ -589,6 +622,31 @@
             reader.onload = function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
+                    
+                    // Validate data structure
+                    if (typeof data !== 'object' || data === null) {
+                        throw new Error('無效的設定檔格式');
+                    }
+                    
+                    // Validate selectedPresets is an array
+                    if (data.selectedPresets && !Array.isArray(data.selectedPresets)) {
+                        throw new Error('selectedPresets 必須是陣列');
+                    }
+                    
+                    // Validate customConfigs is an array
+                    if (data.customConfigs && !Array.isArray(data.customConfigs)) {
+                        throw new Error('customConfigs 必須是陣列');
+                    }
+                    
+                    // Validate each custom config has required fields
+                    if (data.customConfigs) {
+                        for (const config of data.customConfigs) {
+                            if (!config.name || !config.config) {
+                                throw new Error('自訂設定缺少必要欄位 (name 或 config)');
+                            }
+                        }
+                    }
+                    
                     selectedPresets = new Set(data.selectedPresets || []);
                     customConfigs = data.customConfigs || [];
                     saveState();
@@ -597,7 +655,13 @@
                     updateJsonOutput();
                     alert('匯入成功！');
                 } catch (err) {
-                    alert('匯入失敗：\n' + err.message);
+                    let errorMsg = '匯入失敗';
+                    if (err.message.includes('JSON')) {
+                        errorMsg += '：檔案格式錯誤，請確認是有效的 JSON 檔案';
+                    } else {
+                        errorMsg += '：' + err.message;
+                    }
+                    alert(errorMsg);
                 }
             };
             reader.readAsText(file);
