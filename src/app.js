@@ -10,6 +10,111 @@
                     args: ['@playwright/mcp@latest', '--allowed-hosts', '*'],
                     tools: ['*']
                 }
+            },
+            {
+                id: 'github',
+                name: 'GitHub MCP',
+                description: 'GitHub API 整合，可操作儲存庫、Issues、PR 等',
+                config: {
+                    type: 'local',
+                    command: 'npx',
+                    args: ['-y', '@modelcontextprotocol/server-github'],
+                    env: {
+                        GITHUB_PERSONAL_ACCESS_TOKEN: '<YOUR_TOKEN>'
+                    },
+                    tools: ['*']
+                }
+            },
+            {
+                id: 'filesystem',
+                name: 'Filesystem MCP',
+                description: '檔案系統操作，讀寫檔案和目錄',
+                config: {
+                    type: 'local',
+                    command: 'npx',
+                    args: ['-y', '@modelcontextprotocol/server-filesystem', '/path/to/allowed/directory'],
+                    tools: ['*']
+                }
+            },
+            {
+                id: 'brave-search',
+                name: 'Brave Search MCP',
+                description: '網路搜尋功能，使用 Brave Search API',
+                config: {
+                    type: 'local',
+                    command: 'npx',
+                    args: ['-y', '@modelcontextprotocol/server-brave-search'],
+                    env: {
+                        BRAVE_API_KEY: '<YOUR_API_KEY>'
+                    },
+                    tools: ['*']
+                }
+            },
+            {
+                id: 'puppeteer',
+                name: 'Puppeteer MCP',
+                description: '另一個瀏覽器自動化工具，基於 Chrome',
+                config: {
+                    type: 'local',
+                    command: 'npx',
+                    args: ['-y', '@modelcontextprotocol/server-puppeteer'],
+                    tools: ['*']
+                }
+            },
+            {
+                id: 'sqlite',
+                name: 'SQLite MCP',
+                description: 'SQLite 資料庫操作',
+                config: {
+                    type: 'local',
+                    command: 'npx',
+                    args: ['-y', '@modelcontextprotocol/server-sqlite', '/path/to/database.db'],
+                    tools: ['*']
+                }
+            },
+            {
+                id: 'fetch',
+                name: 'Fetch MCP',
+                description: 'HTTP 請求工具，可抓取網頁內容',
+                config: {
+                    type: 'local',
+                    command: 'npx',
+                    args: ['-y', '@modelcontextprotocol/server-fetch'],
+                    tools: ['*']
+                }
+            },
+            {
+                id: 'git',
+                name: 'Git MCP',
+                description: 'Git 版本控制操作',
+                config: {
+                    type: 'local',
+                    command: 'npx',
+                    args: ['-y', '@modelcontextprotocol/server-git'],
+                    tools: ['*']
+                }
+            },
+            {
+                id: 'sequential-thinking',
+                name: 'Sequential Thinking MCP',
+                description: '增強推理能力，支援複雜思考過程',
+                config: {
+                    type: 'local',
+                    command: 'npx',
+                    args: ['-y', '@modelcontextprotocol/server-sequential-thinking'],
+                    tools: ['*']
+                }
+            },
+            {
+                id: 'memory',
+                name: 'Memory MCP',
+                description: '持久化記憶，跨對話保存資訊',
+                config: {
+                    type: 'local',
+                    command: 'npx',
+                    args: ['-y', '@modelcontextprotocol/server-memory'],
+                    tools: ['*']
+                }
             }
         ];
 
