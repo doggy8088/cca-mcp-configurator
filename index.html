@@ -381,6 +381,17 @@
         let customConfigs = [];
         let editingCustomId = null;
 
+        // HTML escape function to prevent XSS
+        function escapeHtml(unsafe) {
+            if (!unsafe) return '';
+            return unsafe
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
         // Initialize
         function init() {
             loadState();
@@ -449,8 +460,8 @@
             container.innerHTML = customConfigs.map((config, index) => `
                 <div class="custom-item">
                     <div class="custom-item-info">
-                        <div class="custom-item-name">${config.name}</div>
-                        ${config.description ? `<div style="font-size: 0.9em; color: #666;">${config.description}</div>` : ''}
+                        <div class="custom-item-name">${escapeHtml(config.name)}</div>
+                        ${config.description ? `<div style="font-size: 0.9em; color: #666;">${escapeHtml(config.description)}</div>` : ''}
                     </div>
                     <div class="custom-item-actions">
                         <button class="small secondary" onclick="editCustom(${index})">編輯</button>
@@ -586,6 +597,8 @@
             document.body.appendChild(textarea);
             textarea.select();
             try {
+                // Using deprecated execCommand as fallback for older browsers and HTTP contexts
+                // where navigator.clipboard is unavailable
                 document.execCommand('copy');
                 alert('已複製到剪貼簿！');
             } catch (err) {
