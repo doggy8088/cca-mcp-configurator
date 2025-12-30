@@ -39,20 +39,20 @@
 #### 安裝依賴
 
 ```bash
-npm install
+bun install
 ```
 
 #### 開發模式
 
 ```bash
-npm run dev
+bun run dev
 # 訪問 http://localhost:8080
 ```
 
 #### 建置生產版本
 
 ```bash
-npm run build
+bun run build
 ```
 
 建置後的檔案會在 `dist` 目錄中，包含壓縮優化的 HTML、CSS 和 JavaScript。
@@ -60,7 +60,7 @@ npm run build
 #### 本地預覽建置版本
 
 ```bash
-npm run serve
+bun run serve
 # 訪問 http://localhost:8080
 ```
 
@@ -163,7 +163,7 @@ php -S localhost:8080
 
 ## 技術細節
 
-- 使用 Node.js 建置系統進行程式碼壓縮和優化
+- 使用 **Bun** 建置系統進行程式碼壓縮和優化
 - 使用 `csso` 壓縮 CSS（減少約 49%）
 - 使用 `terser` 壓縮 JavaScript（減少約 56%）  
 - 使用 `html-minifier-terser` 壓縮 HTML（減少約 33%）
