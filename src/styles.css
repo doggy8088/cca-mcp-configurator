@@ -84,6 +84,17 @@
             cursor: pointer;
         }
 
+        .preset-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 5px;
+        }
+
+        .preset-actions button {
+            padding: 4px 10px;
+            font-size: 0.85em;
+        }
+
         .preset-header input[type="checkbox"] {
             width: 20px;
             height: 20px;
@@ -183,8 +194,23 @@
             line-height: 1.6;
             overflow-x: auto;
             white-space: pre;
-            max-height: 500px;
+            max-height: 400px;
             overflow-y: auto;
+            width: 100%;
+            border: 2px solid #e0e0e0;
+            resize: vertical;
+            min-height: 300px;
+        }
+
+        #jsonOutput:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .json-actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
         }
 
         .actions {
@@ -192,6 +218,10 @@
             gap: 10px;
             margin-top: 15px;
             flex-wrap: wrap;
+        }
+
+        .actions-center {
+            justify-content: center;
         }
 
         .modal {
@@ -219,6 +249,17 @@
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
+        }
+
+        .modal-content-large {
+            max-width: 700px;
+        }
+
+        .connection-fields {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 15px;
         }
 
         .modal-header {
