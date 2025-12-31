@@ -205,7 +205,8 @@
             editingPresetId = null;
             document.getElementById('modalTitle').textContent = '新增自訂設定';
             document.getElementById('customForm').reset();
-            document.getElementById('connectionType').value = 'stdio';
+            // Set stdio as default for radio buttons
+            document.querySelector('input[name="connectionType"][value="stdio"]').checked = true;
             updateConnectionTypeFields();
             document.getElementById('customName').disabled = false;
             document.getElementById('customDescription').disabled = false;
@@ -224,7 +225,7 @@
 
         // Update connection type fields visibility
         function updateConnectionTypeFields() {
-            const type = document.getElementById('connectionType').value;
+            const type = document.querySelector('input[name="connectionType"]:checked').value;
             document.getElementById('stdioFields').style.display = type === 'stdio' ? 'block' : 'none';
             document.getElementById('httpFields').style.display = type === 'http' ? 'block' : 'none';
             document.getElementById('sseFields').style.display = type === 'sse' ? 'block' : 'none';
@@ -252,7 +253,11 @@
         // Load config to form
         function loadConfigToForm(config) {
             const type = config.type || 'stdio';
-            document.getElementById('connectionType').value = type;
+            // Set the radio button for the connection type
+            const radio = document.querySelector(`input[name="connectionType"][value="${type}"]`);
+            if (radio) {
+                radio.checked = true;
+            }
             updateConnectionTypeFields();
 
             if (type === 'stdio') {
@@ -279,7 +284,7 @@
 
         // Build config from form
         function buildConfigFromForm() {
-            const type = document.getElementById('connectionType').value;
+            const type = document.querySelector('input[name="connectionType"]:checked').value;
             const config = { type };
 
             try {
