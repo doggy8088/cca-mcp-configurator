@@ -282,37 +282,41 @@
             const type = document.getElementById('connectionType').value;
             const config = { type };
 
-            if (type === 'stdio') {
-                config.command = document.getElementById('stdioCommand').value.trim();
-                const argsText = document.getElementById('stdioArgs').value.trim();
-                config.args = argsText ? argsText.split('\n').map(a => a.trim()).filter(a => a) : [];
-                
-                const envText = document.getElementById('stdioEnv').value.trim();
-                if (envText) {
-                    config.env = JSON.parse(envText);
+            try {
+                if (type === 'stdio') {
+                    config.command = document.getElementById('stdioCommand').value.trim();
+                    const argsText = document.getElementById('stdioArgs').value.trim();
+                    config.args = argsText ? argsText.split('\n').map(a => a.trim()).filter(a => a) : [];
+                    
+                    const envText = document.getElementById('stdioEnv').value.trim();
+                    if (envText) {
+                        config.env = JSON.parse(envText);
+                    }
+                } else if (type === 'http') {
+                    config.url = document.getElementById('httpUrl').value.trim();
+                    const headersText = document.getElementById('httpHeaders').value.trim();
+                    if (headersText) {
+                        config.headers = JSON.parse(headersText);
+                    }
+                } else if (type === 'sse') {
+                    config.url = document.getElementById('sseUrl').value.trim();
+                    const headersText = document.getElementById('sseHeaders').value.trim();
+                    if (headersText) {
+                        config.headers = JSON.parse(headersText);
+                    }
                 }
-            } else if (type === 'http') {
-                config.url = document.getElementById('httpUrl').value.trim();
-                const headersText = document.getElementById('httpHeaders').value.trim();
-                if (headersText) {
-                    config.headers = JSON.parse(headersText);
-                }
-            } else if (type === 'sse') {
-                config.url = document.getElementById('sseUrl').value.trim();
-                const headersText = document.getElementById('sseHeaders').value.trim();
-                if (headersText) {
-                    config.headers = JSON.parse(headersText);
-                }
-            }
 
-            // Handle tools
-            const toolsText = document.getElementById('customTools').value.trim();
-            if (toolsText === '*') {
-                config.tools = ['*'];
-            } else if (toolsText.startsWith('[')) {
-                config.tools = JSON.parse(toolsText);
-            } else {
-                config.tools = ['*'];
+                // Handle tools
+                const toolsText = document.getElementById('customTools').value.trim();
+                if (toolsText === '*') {
+                    config.tools = ['*'];
+                } else if (toolsText.startsWith('[')) {
+                    config.tools = JSON.parse(toolsText);
+                } else {
+                    config.tools = ['*'];
+                }
+            } catch (e) {
+                throw new Error('JSON 格式錯誤：' + e.message);
             }
 
             return config;
