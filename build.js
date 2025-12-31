@@ -3,10 +3,28 @@ import { minify as minifyCSS } from 'csso';
 import { minify as minifyJS } from 'terser';
 import { minify as minifyHTML } from 'html-minifier-terser';
 
+function injectAppVersion(html, version) {
+  const metaTagRegex = /<meta\b[^>]*\bname=(["'])app-version\1[^>]*>/i;
+
+  if (!metaTagRegex.test(html)) {
+    return html.replace(/<\/head>/i, `  <meta name="app-version" content="${version}">\n</head>`);
+  }
+
+  return html.replace(metaTagRegex, (tag) => {
+    if (/\bcontent=/.test(tag)) {
+      return tag.replace(/\bcontent=(['"])[^'"]*\1/i, `content="${version}"`);
+    }
+    return tag.replace(/\/?>$/, (end) => ` content="${version}"${end}`);
+  });
+}
+
 async function build() {
   console.log('🔨 Building and minifying...');
 
   // Read source files
+  const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
+  const appVersion = pkg?.version ?? 'dev';
+
   const css = readFileSync('src/styles.css', 'utf8');
   const js = readFileSync('src/app.js', 'utf8');
   const html = readFileSync('src/index.html', 'utf8');
@@ -50,7 +68,7 @@ async function build() {
 
   // Update HTML to use minified files and minify
   console.log('📦 Minifying HTML...');
-  const htmlWithMinified = html
+  const htmlWithMinified = injectAppVersion(html, appVersion)
     .replace('href="styles.css"', 'href="styles.min.css"')
     .replace('src="app.js"', 'src="app.min.js"');
   

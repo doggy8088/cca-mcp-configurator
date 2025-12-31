@@ -401,3 +401,36 @@
         input[type="file"] {
             display: none;
         }
+
+        .app-footer {
+            border-top: 1px solid #e0e0e0;
+            background: #f8f9fa;
+            padding: 14px 30px;
+            color: #666;
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        .app-footer__inner {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .app-footer a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .app-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .app-footer__version {
+            color: #999;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.9em;
+        }

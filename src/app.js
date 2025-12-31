@@ -89,8 +89,25 @@
                 .replace(/'/g, "&#039;");
         }
 
+        function setFooterVersion() {
+            const versionEl = document.getElementById('appVersion');
+            if (!versionEl) return;
+
+            const meta = document.querySelector('meta[name="app-version"]');
+            const version = meta?.getAttribute('content')?.trim();
+
+            if (!version || version === 'dev') {
+                versionEl.hidden = true;
+                return;
+            }
+
+            versionEl.textContent = `v${version}`;
+            versionEl.hidden = false;
+        }
+
         // Initialize
         function init() {
+            setFooterVersion();
             loadState();
             renderPresets();
             renderCustomConfigs();
