@@ -34,6 +34,9 @@ async function build() {
         'closeCustomModal',
         'editCustom',
         'deleteCustom',
+        'editPreset',
+        'updateConnectionTypeFields',
+        'updateFromJson',
         'copyToClipboard',
         'exportConfig',
         'importConfig'
