@@ -27,108 +27,107 @@
             </div>
 
             <!-- Right Panel: JSON Output -->
-            <div class="panel">
-                <h2>MCP 設定 (JSON)</h2>
-                <textarea id="jsonOutput" spellcheck="false"></textarea>
-                <div class="json-actions">
-                    <button onclick="updateFromJson()" class="secondary">🔄 從 JSON 更新設定</button>
-                </div>
-                <div class="actions actions-center">
-                    <button onclick="copyToClipboard()">📋 複製到剪貼簿</button>
-                    <button onclick="exportConfig()" class="secondary">💾 匯出設定</button>
-                    <button onclick="document.getElementById('importFile').click()" class="secondary">📂 匯入設定</button>
-                    <input type="file" id="importFile" accept=".json" onchange="importConfig(event)">
-                </div>
-            </div>
+	            <div class="panel">
+	                <h2>MCP 設定 (JSON)</h2>
+	                <textarea id="jsonOutput" spellcheck="false"></textarea>
+	                <div class="actions actions-center">
+	                    <button onclick="copyToClipboard()">📋 複製到剪貼簿</button>
+	                    <button onclick="exportConfig()" class="secondary">💾 匯出設定</button>
+	                    <button onclick="document.getElementById('importFile').click()" class="secondary">📂 匯入設定</button>
+	                    <input type="file" id="importFile" accept=".json" onchange="importConfig(event)">
+	                </div>
+	            </div>
         </div>
     </div>
 
-    <!-- Add/Edit Custom Modal -->
-    <div id="customModal" class="modal">
-        <div class="modal-content modal-content-large">
-            <div class="modal-header">
-                <h3 id="modalTitle">新增自訂設定</h3>
-            </div>
-            <form id="customForm">
-                <div class="form-group">
-                    <label for="customName">名稱 *</label>
-                    <input type="text" id="customName" required placeholder="例如: my-custom-server">
-                </div>
-                <div class="form-group">
-                    <label for="customDescription">描述</label>
-                    <input type="text" id="customDescription" placeholder="簡短描述此設定的用途">
-                </div>
-                <div class="form-group">
-                    <label>連線類型 *</label>
-                    <div class="radio-group">
-                        <label class="radio-label">
-                            <input type="radio" name="connectionType" value="stdio" checked onchange="updateConnectionTypeFields()">
-                            <span>STDIO (標準輸入輸出)</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="connectionType" value="http" onchange="updateConnectionTypeFields()">
-                            <span>HTTP</span>
-                        </label>
-                        <label class="radio-label">
-                            <input type="radio" name="connectionType" value="sse" onchange="updateConnectionTypeFields()">
-                            <span>SSE (Server-Sent Events)</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- STDIO fields -->
-                <div id="stdioFields" class="connection-fields">
-                    <div class="form-group">
-                        <label for="stdioCommand">命令 *</label>
-                        <input type="text" id="stdioCommand" placeholder="例如: npx, node, python">
-                    </div>
-                    <div class="form-group">
-                        <label for="stdioArgs">參數 (每行一個)</label>
-                        <textarea id="stdioArgs" rows="3" placeholder="例如:&#10;-y&#10;@modelcontextprotocol/server-memory"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="stdioEnv">環境變數 (JSON 格式，選填)</label>
-                        <textarea id="stdioEnv" rows="3" placeholder='{&#10;  "API_KEY": "your-api-key"&#10;}'></textarea>
-                    </div>
-                </div>
-
-                <!-- HTTP fields -->
-                <div id="httpFields" class="connection-fields" style="display: none;">
-                    <div class="form-group">
-                        <label for="httpUrl">URL *</label>
-                        <input type="url" id="httpUrl" placeholder="例如: http://localhost:3000">
-                    </div>
-                    <div class="form-group">
-                        <label for="httpHeaders">HTTP Headers (JSON 格式，選填)</label>
-                        <textarea id="httpHeaders" rows="3" placeholder='{&#10;  "Authorization": "Bearer token"&#10;}'></textarea>
-                    </div>
-                </div>
-
-                <!-- SSE fields -->
-                <div id="sseFields" class="connection-fields" style="display: none;">
-                    <div class="form-group">
-                        <label for="sseUrl">URL *</label>
-                        <input type="url" id="sseUrl" placeholder="例如: http://localhost:3000/sse">
-                    </div>
-                    <div class="form-group">
-                        <label for="sseHeaders">HTTP Headers (JSON 格式，選填)</label>
-                        <textarea id="sseHeaders" rows="3" placeholder='{&#10;  "Authorization": "Bearer token"&#10;}'></textarea>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="customTools">工具 (Tools)</label>
-                    <input type="text" id="customTools" value="*" placeholder='["*"] 或具體工具名稱'>
-                    <small style="color: #666; display: block; margin-top: 5px;">使用 ["*"] 表示所有工具，或指定特定工具名稱</small>
-                </div>
-
-                <div class="modal-actions">
-                    <button type="button" onclick="closeCustomModal()" class="secondary">取消</button>
-                    <button type="submit">儲存</button>
-                </div>
-            </form>
-        </div>
-    </div>
+	    <!-- Add/Edit Custom Modal -->
+	    <div id="customModal" class="modal">
+	        <div class="modal-content modal-content-large">
+	            <div class="modal-header">
+	                <h3 id="modalTitle">新增自訂設定</h3>
+	            </div>
+	            <form id="customForm">
+	                <div class="modal-body">
+	                    <div class="form-group">
+	                        <label for="customName">名稱 *</label>
+	                        <input type="text" id="customName" required placeholder="例如: my-custom-server">
+	                    </div>
+	                    <div class="form-group">
+	                        <label for="customDescription">描述</label>
+	                        <input type="text" id="customDescription" placeholder="簡短描述此設定的用途">
+	                    </div>
+	                    <div class="form-group">
+	                        <label>連線類型 *</label>
+	                        <div class="radio-group">
+	                            <label class="radio-label">
+	                                <input type="radio" name="connectionType" value="stdio" checked onchange="updateConnectionTypeFields()">
+	                                <span>STDIO</span>
+	                            </label>
+	                            <label class="radio-label">
+	                                <input type="radio" name="connectionType" value="http" onchange="updateConnectionTypeFields()">
+	                                <span>HTTP</span>
+	                            </label>
+	                            <label class="radio-label">
+	                                <input type="radio" name="connectionType" value="sse" onchange="updateConnectionTypeFields()">
+	                                <span>SSE</span>
+	                            </label>
+	                        </div>
+	                    </div>
+	
+	                    <!-- STDIO fields -->
+	                    <div id="stdioFields" class="connection-fields">
+	                        <div class="form-group">
+	                            <label for="stdioCommand">命令 *</label>
+	                            <input type="text" id="stdioCommand" placeholder="例如: npx, node, python">
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="stdioArgs">參數 (每行一個)</label>
+	                            <textarea id="stdioArgs" rows="3" placeholder="例如:&#10;-y&#10;@modelcontextprotocol/server-memory"></textarea>
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="stdioEnv">環境變數 (JSON 格式，選填)</label>
+	                            <textarea id="stdioEnv" rows="3" placeholder='{&#10;  "API_KEY": "your-api-key"&#10;}'></textarea>
+	                        </div>
+	                    </div>
+	
+	                    <!-- HTTP fields -->
+	                    <div id="httpFields" class="connection-fields" style="display: none;">
+	                        <div class="form-group">
+	                            <label for="httpUrl">URL *</label>
+	                            <input type="url" id="httpUrl" placeholder="例如: http://localhost:3000">
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="httpHeaders">HTTP Headers (JSON 格式，選填)</label>
+	                            <textarea id="httpHeaders" rows="3" placeholder='{&#10;  "Authorization": "Bearer token"&#10;}'></textarea>
+	                        </div>
+	                    </div>
+	
+	                    <!-- SSE fields -->
+	                    <div id="sseFields" class="connection-fields" style="display: none;">
+	                        <div class="form-group">
+	                            <label for="sseUrl">URL *</label>
+	                            <input type="url" id="sseUrl" placeholder="例如: http://localhost:3000/sse">
+	                        </div>
+	                        <div class="form-group">
+	                            <label for="sseHeaders">HTTP Headers (JSON 格式，選填)</label>
+	                            <textarea id="sseHeaders" rows="3" placeholder='{&#10;  "Authorization": "Bearer token"&#10;}'></textarea>
+	                        </div>
+	                    </div>
+	
+	                    <div class="form-group">
+	                        <label for="customTools">工具 (Tools)</label>
+	                        <input type="text" id="customTools" value='["*"]' placeholder='["*"] 或具體工具名稱'>
+	                        <small style="color: #666; display: block; margin-top: 5px;">使用 ["*"] 表示所有工具，或指定特定工具名稱</small>
+	                    </div>
+	                </div>
+	
+	                <div class="modal-actions">
+	                    <button type="button" onclick="closeCustomModal()" class="secondary">取消</button>
+	                    <button type="submit">儲存</button>
+	                </div>
+	            </form>
+	        </div>
+	    </div>
 
     <script src="app.js"></script>
 </body>

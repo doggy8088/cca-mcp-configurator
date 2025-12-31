@@ -199,6 +199,41 @@
             document.getElementById('jsonOutput').value = JSON.stringify(output, null, 2);
         }
 
+        function stableStringify(value) {
+            if (value === null || typeof value !== 'object') return JSON.stringify(value);
+            if (Array.isArray(value)) return '[' + value.map(stableStringify).join(',') + ']';
+            const keys = Object.keys(value).sort();
+            return '{' + keys.map(k => JSON.stringify(k) + ':' + stableStringify(value[k])).join(',') + '}';
+        }
+
+        function applyStateFromJsonText(jsonText) {
+            const data = JSON.parse(jsonText);
+
+            if (!data.mcpServers || typeof data.mcpServers !== 'object' || Array.isArray(data.mcpServers)) {
+                throw new Error('JSON 必須包含 mcpServers 物件');
+            }
+
+            selectedPresets.clear();
+            presetOverrides = {};
+            customConfigs = [];
+
+            for (const [serverName, serverConfig] of Object.entries(data.mcpServers)) {
+                const preset = PRESETS.find(p => p.id === serverName);
+                if (preset) {
+                    selectedPresets.add(serverName);
+                    if (stableStringify(serverConfig) !== stableStringify(preset.config)) {
+                        presetOverrides[serverName] = serverConfig;
+                    }
+                } else {
+                    customConfigs.push({
+                        name: serverName,
+                        description: '',
+                        config: serverConfig
+                    });
+                }
+            }
+        }
+
         // Open add custom modal
         function openAddCustomModal() {
             editingCustomId = null;
@@ -274,11 +309,11 @@
 
             const tools = config.tools;
             if (Array.isArray(tools) && tools.length === 1 && tools[0] === '*') {
-                document.getElementById('customTools').value = '*';
+                document.getElementById('customTools').value = '["*"]';
             } else if (Array.isArray(tools)) {
                 document.getElementById('customTools').value = JSON.stringify(tools);
             } else {
-                document.getElementById('customTools').value = '*';
+                document.getElementById('customTools').value = '["*"]';
             }
         }
 
@@ -413,50 +448,19 @@
             }
         });
 
-        // Update from JSON
-        function updateFromJson() {
-            const jsonText = document.getElementById('jsonOutput').value;
+        // Auto-apply when user edits JSON
+        document.getElementById('jsonOutput').addEventListener('input', function() {
+            const textarea = this;
             try {
-                const data = JSON.parse(jsonText);
-                
-                if (!data.mcpServers || typeof data.mcpServers !== 'object') {
-                    throw new Error('JSON 必須包含 mcpServers 物件');
-                }
-
-                // Clear current selections
-                selectedPresets.clear();
-                presetOverrides = {};
-                customConfigs = [];
-
-                // Process each server config
-                for (const [serverName, serverConfig] of Object.entries(data.mcpServers)) {
-                    // Check if it's a preset
-                    const preset = PRESETS.find(p => p.id === serverName);
-                    if (preset) {
-                        selectedPresets.add(serverName);
-                        // Check if config is different from default
-                        if (JSON.stringify(serverConfig) !== JSON.stringify(preset.config)) {
-                            presetOverrides[serverName] = serverConfig;
-                        }
-                    } else {
-                        // It's a custom config
-                        customConfigs.push({
-                            name: serverName,
-                            description: '',
-                            config: serverConfig
-                        });
-                    }
-                }
-
+                applyStateFromJsonText(textarea.value);
+                textarea.classList.remove('is-invalid');
                 saveState();
                 renderPresets();
                 renderCustomConfigs();
-                updateJsonOutput();
-                alert('已從 JSON 更新設定！');
             } catch (e) {
-                alert('JSON 格式錯誤：' + e.message);
+                textarea.classList.add('is-invalid');
             }
-        }
+        });
 
         // Copy to clipboard
         function copyToClipboard() {
@@ -564,13 +568,6 @@
             reader.readAsText(file);
             event.target.value = ''; // Reset file input
         }
-
-        // Close modal when clicking outside
-        document.getElementById('customModal').addEventListener('click', function(e) {
-            if (e.target === this) {
-                closeCustomModal();
-            }
-        });
 
         // Initialize on load
         init();
