@@ -258,6 +258,19 @@
             document.getElementById('customDescription').disabled = false;
         }
 
+        function isCustomModalOpen() {
+            return document.getElementById('customModal').classList.contains('show');
+        }
+
+        function saveCustomModal() {
+            const form = document.getElementById('customForm');
+            if (typeof form.requestSubmit === 'function') {
+                form.requestSubmit();
+                return;
+            }
+            form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+        }
+
         // Update connection type fields visibility
         function updateConnectionTypeFields() {
             const type = document.querySelector('input[name="connectionType"]:checked').value;
@@ -445,6 +458,27 @@
                     errorMsg += '：' + e.message;
                 }
                 alert(errorMsg);
+            }
+        });
+
+        // Keyboard shortcuts for modal: Esc = cancel, Ctrl+Enter = save
+        document.addEventListener('keydown', function(e) {
+            if (!isCustomModalOpen() || e.isComposing) return;
+
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                closeCustomModal();
+                return;
+            }
+
+            if (
+                e.key === 'Enter' &&
+                (e.ctrlKey || e.metaKey) &&
+                !e.shiftKey &&
+                !e.altKey
+            ) {
+                e.preventDefault();
+                saveCustomModal();
             }
         });
 
