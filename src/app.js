@@ -11,31 +11,31 @@
                     tools: ['*']
                 }
             },
-            {
-                id: 'github',
-                name: 'GitHub MCP',
-                description: 'GitHub API 整合，可操作儲存庫、Issues、PR 等',
-                config: {
-                    type: 'local',
-                    command: 'npx',
-                    args: ['-y', '@modelcontextprotocol/server-github'],
-                    env: {
-                        GITHUB_PERSONAL_ACCESS_TOKEN: '<YOUR_TOKEN>'
-                    },
-                    tools: ['*']
-                }
-            },
-            {
-                id: 'filesystem',
-                name: 'Filesystem MCP',
-                description: '檔案系統操作，讀寫檔案和目錄',
-                config: {
-                    type: 'local',
-                    command: 'npx',
-                    args: ['-y', '@modelcontextprotocol/server-filesystem', '/path/to/allowed/directory'],
-                    tools: ['*']
-                }
-            },
+            // {
+            //     id: 'github',
+            //     name: 'GitHub MCP',
+            //     description: 'GitHub API 整合，可操作儲存庫、Issues、PR 等',
+            //     config: {
+            //         type: 'local',
+            //         command: 'npx',
+            //         args: ['-y', '@modelcontextprotocol/server-github'],
+            //         env: {
+            //             GITHUB_PERSONAL_ACCESS_TOKEN: '<YOUR_TOKEN>'
+            //         },
+            //         tools: ['*']
+            //     }
+            // },
+            // {
+            //     id: 'filesystem',
+            //     name: 'Filesystem MCP',
+            //     description: '檔案系統操作，讀寫檔案和目錄',
+            //     config: {
+            //         type: 'local',
+            //         command: 'npx',
+            //         args: ['-y', '@modelcontextprotocol/server-filesystem', '/path/to/allowed/directory'],
+            //         tools: ['*']
+            //     }
+            // },
             {
                 id: 'brave-search',
                 name: 'Brave Search MCP',
@@ -72,28 +72,28 @@
                     tools: ['*']
                 }
             },
-            {
-                id: 'fetch',
-                name: 'Fetch MCP',
-                description: 'HTTP 請求工具，可抓取網頁內容',
-                config: {
-                    type: 'local',
-                    command: 'npx',
-                    args: ['-y', '@modelcontextprotocol/server-fetch'],
-                    tools: ['*']
-                }
-            },
-            {
-                id: 'git',
-                name: 'Git MCP',
-                description: 'Git 版本控制操作',
-                config: {
-                    type: 'local',
-                    command: 'npx',
-                    args: ['-y', '@modelcontextprotocol/server-git'],
-                    tools: ['*']
-                }
-            },
+            // {
+            //     id: 'fetch',
+            //     name: 'Fetch MCP',
+            //     description: 'HTTP 請求工具，可抓取網頁內容',
+            //     config: {
+            //         type: 'local',
+            //         command: 'npx',
+            //         args: ['-y', '@modelcontextprotocol/server-fetch'],
+            //         tools: ['*']
+            //     }
+            // },
+            // {
+            //     id: 'git',
+            //     name: 'Git MCP',
+            //     description: 'Git 版本控制操作',
+            //     config: {
+            //         type: 'local',
+            //         command: 'npx',
+            //         args: ['-y', '@modelcontextprotocol/server-git'],
+            //         tools: ['*']
+            //     }
+            // },
             {
                 id: 'sequential-thinking',
                 name: 'Sequential Thinking MCP',
@@ -315,7 +315,7 @@
         // Copy to clipboard
         function copyToClipboard() {
             const output = document.getElementById('jsonOutput').textContent;
-            
+
             // Try modern clipboard API first
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(output).then(() => {
@@ -377,22 +377,22 @@
             reader.onload = function(e) {
                 try {
                     const data = JSON.parse(e.target.result);
-                    
+
                     // Validate data structure
                     if (typeof data !== 'object' || data === null) {
                         throw new Error('無效的設定檔格式');
                     }
-                    
+
                     // Validate selectedPresets is an array
                     if (data.selectedPresets && !Array.isArray(data.selectedPresets)) {
                         throw new Error('selectedPresets 必須是陣列');
                     }
-                    
+
                     // Validate customConfigs is an array
                     if (data.customConfigs && !Array.isArray(data.customConfigs)) {
                         throw new Error('customConfigs 必須是陣列');
                     }
-                    
+
                     // Validate each custom config has required fields
                     if (data.customConfigs) {
                         for (const config of data.customConfigs) {
@@ -401,7 +401,7 @@
                             }
                         }
                     }
-                    
+
                     selectedPresets = new Set(data.selectedPresets || []);
                     customConfigs = data.customConfigs || [];
                     saveState();
