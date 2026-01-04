@@ -2,7 +2,7 @@
 
 一個簡單易用的網頁工具，用於管理 GitHub Copilot 的 MCP (Model Context Protocol) 設定。
 
-![MCP Configurator](./docs/images/mcp-configurator.png)
+![MCP Configurator](https://github.com/doggy8088/cca-mcp-configurator/raw/main/docs/images/mcp-configurator.png)
 
 ## 功能特色
 
