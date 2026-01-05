@@ -439,6 +439,63 @@
             border-top: 1px solid #e0e0e0;
         }
 
+        .app-footer__notice {
+            margin: 20px 0;
+        }
+
+        .notice-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .notice-title {
+            font-weight: 700;
+            font-size: 1.1em;
+            color: #856404;
+            margin-bottom: 12px;
+        }
+
+        .notice-content {
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .notice-content p {
+            margin: 10px 0;
+        }
+
+        .notice-content ol {
+            margin: 10px 0;
+            padding-left: 24px;
+        }
+
+        .notice-content li {
+            margin: 8px 0;
+        }
+
+        .notice-content code {
+            background: #f8f9fa;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.9em;
+            color: #d63384;
+            border: 1px solid #e0e0e0;
+        }
+
+        .notice-content a {
+            color: #667eea;
+            text-decoration: none;
+            word-break: break-all;
+        }
+
+        .notice-content a:hover {
+            text-decoration: underline;
+        }
+
         .app-footer a {
             color: #667eea;
             text-decoration: none;
