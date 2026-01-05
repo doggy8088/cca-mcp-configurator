@@ -489,7 +489,7 @@
         .notice-content a {
             color: #667eea;
             text-decoration: none;
-            word-break: break-all;
+            overflow-wrap: break-word;
         }
 
         .notice-content a:hover {
