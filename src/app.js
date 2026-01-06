@@ -69,6 +69,17 @@
                     args: ['-y', '@modelcontextprotocol/server-memory'],
                     tools: ['*']
                 }
+            },
+            {
+                id: 'context7',
+                name: 'Context7 MCP',
+                description: '取得最新的程式庫文件與範例程式碼，提升 AI 程式碼生成品質',
+                config: {
+                    type: 'stdio',
+                    command: 'npx',
+                    args: ['-y', '@upstash/context7-mcp'],
+                    tools: ['*']
+                }
             }
         ];
 
