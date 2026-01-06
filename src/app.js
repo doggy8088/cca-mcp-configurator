@@ -3,6 +3,7 @@
             {
                 id: 'playwright',
                 name: 'Playwright MCP',
+                // Note: HTML in description is safe as it's hardcoded, not user input
                 description: '瀏覽器自動化工具，可用於網頁測試和互動 (<a href="https://github.com/microsoft/playwright-mcp" target="_blank" rel="noopener noreferrer">官方 Repo</a>)',
                 config: {
                     type: 'stdio',
@@ -623,10 +624,20 @@
         // Copy code block content
         window.copyCodeBlock = function() {
             const codeBlock = document.querySelector('.notice-content pre code');
+            if (!codeBlock) {
+                console.error('Code block not found');
+                return;
+            }
+            
             const text = codeBlock.textContent;
             
             navigator.clipboard.writeText(text).then(() => {
                 const btn = document.querySelector('.copy-code-btn');
+                if (!btn) {
+                    console.error('Copy button not found');
+                    return;
+                }
+                
                 const originalHTML = btn.innerHTML;
                 
                 // Show success feedback
