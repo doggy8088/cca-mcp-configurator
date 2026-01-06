@@ -519,6 +519,12 @@
             border-color: #667eea;
         }
 
+        .notice-content code.copyable-path.copied {
+            background: #28a745;
+            color: white;
+            border-color: #28a745;
+        }
+
         .notice-content a {
             color: #667eea;
             text-decoration: none;
