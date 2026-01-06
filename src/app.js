@@ -3,11 +3,12 @@
             {
                 id: 'playwright',
                 name: 'Playwright MCP',
-                description: '瀏覽器自動化工具，可用於網頁測試和互動',
+                // Note: HTML in description is safe as it's hardcoded, not user input
+                description: '瀏覽器自動化工具，可用於網頁測試和互動 (<a href="https://github.com/microsoft/playwright-mcp" target="_blank" rel="noopener noreferrer">官方 Repo</a>)',
                 config: {
                     type: 'stdio',
                     command: 'npx',
-                    args: ['@playwright/mcp@latest', '--allowed-hosts', '*'],
+                    args: ['@playwright/mcp@latest', '--viewport-size', '1280x720', '--allowed-hosts', '*'],
                     tools: ['*']
                 }
             },
@@ -619,6 +620,43 @@
             reader.readAsText(file);
             event.target.value = ''; // Reset file input
         }
+
+        // Copy code block content
+        window.copyCodeBlock = function() {
+            const codeBlock = document.querySelector('.notice-content pre code');
+            if (!codeBlock) {
+                console.error('Code block not found');
+                return;
+            }
+            
+            const text = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(text).then(() => {
+                const btn = document.querySelector('.copy-code-btn');
+                if (!btn) {
+                    console.error('Copy button not found');
+                    return;
+                }
+                
+                const originalHTML = btn.innerHTML;
+                
+                // Show success feedback
+                btn.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                `;
+                btn.style.color = '#28a745';
+                
+                setTimeout(() => {
+                    btn.innerHTML = originalHTML;
+                    btn.style.color = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                alert('複製失敗，請手動複製');
+            });
+        };
 
         // Initialize on load
         init();
