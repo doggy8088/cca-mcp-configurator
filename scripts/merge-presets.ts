@@ -78,7 +78,9 @@ function validatePreset(preset: any, filename: string): preset is Preset {
   // Check if filename matches id
   const expectedFilename = `${preset.id}.json`;
   if (filename !== expectedFilename) {
-    errors.push(`Filename '${filename}' does not match preset id '${preset.id}' (expected '${expectedFilename}')`);
+    errors.push(
+      `Filename '${filename}' does not match preset id '${preset.id}' (expected '${expectedFilename}')`
+    );
   }
 
   if (errors.length > 0) {
@@ -93,7 +95,7 @@ function validatePreset(preset: any, filename: string): preset is Preset {
  */
 export function loadPresets(presetsDir: string): Preset[] {
   const presets: Preset[] = [];
-  const files = readdirSync(presetsDir).filter(f => f.endsWith('.json'));
+  const files = readdirSync(presetsDir).filter((f) => f.endsWith('.json'));
   const seenIds = new Set<string>();
 
   for (const file of files) {
@@ -130,12 +132,12 @@ if (import.meta.main) {
   try {
     const presetsDir = process.argv[2] || 'presets';
     console.log(`Validating presets in ${presetsDir}...`);
-    
+
     const presets = loadPresets(presetsDir);
-    
+
     console.log(`✅ All ${presets.length} preset(s) are valid:`);
-    presets.forEach(p => console.log(`  - ${p.id}: ${p.name}`));
-    
+    presets.forEach((p) => console.log(`  - ${p.id}: ${p.name}`));
+
     process.exit(0);
   } catch (error) {
     if (error instanceof Error) {

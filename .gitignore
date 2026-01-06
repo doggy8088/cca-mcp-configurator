@@ -1,7 +1,8 @@
 # dependencies (bun install)
 node_modules
 
-# output (keep dist for GitHub Pages)
+# output
+dist
 out
 *.tgz
 

@@ -3,7 +3,9 @@
   "version": "1.1.0",
   "description": "GitHub Copilot MCP Configurator",
   "scripts": {
-    "build": "bun run build:clean && bun run build:minify",
+    "format": "prettier --write \"src/**/*.{ts,js,html,css,json}\" \"scripts/**/*.ts\" \"presets/**/*.json\" \"*.{ts,json}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,js,html,css,json}\" \"scripts/**/*.ts\" \"presets/**/*.json\" \"*.{ts,json}\"",
+    "build": "bun run format && bun run build:clean && bun run build:minify",
     "build:clean": "rm -rf dist && mkdir -p dist",
     "build:minify": "bun run build.ts",
     "test": "bun run build && bun -e \"console.log('Build test passed')\"",
@@ -15,6 +17,7 @@
     "@types/bun": "latest",
     "csso": "^5.0.5",
     "html-minifier-terser": "^7.2.0",
+    "prettier": "^3.7.4",
     "terser": "^5.36.0"
   },
   "type": "module"

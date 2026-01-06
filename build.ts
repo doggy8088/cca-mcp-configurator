@@ -37,16 +37,13 @@ async function build() {
 
   // Inject presets into TypeScript code
   const presetsJson = JSON.stringify(presets, null, 2);
-  ts = ts.replace(
-    /const PRESETS:.*?= \[\];/s,
-    `const PRESETS: Preset[] = ${presetsJson};`
-  );
+  ts = ts.replace(/const PRESETS:.*?= \[\];/s, `const PRESETS: Preset[] = ${presetsJson};`);
 
   // Minify CSS
   console.log('📦 Minifying CSS...');
   const minifiedCSS = minifyCSS(css).css;
   writeFileSync('dist/styles.min.css', minifiedCSS);
-  
+
   // Write modified TypeScript to a temporary file
   const tmpDir = process.env.TMPDIR || process.env.TEMP || '/tmp';
   const tmpFile = `${tmpDir}/app-temp.ts`;
@@ -58,7 +55,7 @@ async function build() {
     entrypoints: [tmpFile],
     target: 'browser',
     minify: false,
-    sourcemap: 'none'
+    sourcemap: 'none',
   });
 
   if (!transpiled.success) {
@@ -94,8 +91,8 @@ async function build() {
         'importConfig',
         'copyCodeBlock',
         'copyPath',
-        'saveCustomModal'
-      ]
+        'saveCustomModal',
+      ],
     },
     format: {
       comments: false,
@@ -108,7 +105,7 @@ async function build() {
   const htmlWithMinified = injectAppVersion(html, appVersion)
     .replace('href="styles.css"', 'href="styles.min.css"')
     .replace('src="app.ts"', 'src="app.min.js"');
-  
+
   const minifiedHTML = await minifyHTML(htmlWithMinified, {
     collapseWhitespace: true,
     removeComments: true,
@@ -130,10 +127,18 @@ async function build() {
   const htmlMinSize = Buffer.byteLength(minifiedHTML, 'utf8');
 
   console.log('\n✅ Build complete!');
-  console.log(`CSS: ${cssOrigSize} → ${cssMinSize} bytes (${Math.round((1 - cssMinSize/cssOrigSize) * 100)}% reduction)`);
-  console.log(`TS/JS: ${tsOrigSize} → ${tsMinSize} bytes (${Math.round((1 - tsMinSize/tsOrigSize) * 100)}% reduction)`);
-  console.log(`HTML: ${htmlOrigSize} → ${htmlMinSize} bytes (${Math.round((1 - htmlMinSize/htmlOrigSize) * 100)}% reduction)`);
-  console.log(`Total: ${cssOrigSize + tsOrigSize + htmlOrigSize} → ${cssMinSize + tsMinSize + htmlMinSize} bytes\n`);
+  console.log(
+    `CSS: ${cssOrigSize} → ${cssMinSize} bytes (${Math.round((1 - cssMinSize / cssOrigSize) * 100)}% reduction)`
+  );
+  console.log(
+    `TS/JS: ${tsOrigSize} → ${tsMinSize} bytes (${Math.round((1 - tsMinSize / tsOrigSize) * 100)}% reduction)`
+  );
+  console.log(
+    `HTML: ${htmlOrigSize} → ${htmlMinSize} bytes (${Math.round((1 - htmlMinSize / htmlOrigSize) * 100)}% reduction)`
+  );
+  console.log(
+    `Total: ${cssOrigSize + tsOrigSize + htmlOrigSize} → ${cssMinSize + tsMinSize + htmlMinSize} bytes\n`
+  );
 }
 
 build().catch(console.error);

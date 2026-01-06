@@ -1,0 +1,11 @@
+# Build outputs
+dist/
+node_modules/
+
+# Lock files
+package-lock.json
+bun.lock
+
+# Generated files
+*.min.js
+*.min.css
