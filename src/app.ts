@@ -767,3 +767,9 @@ function importConfig(event: Event): void {
 
 // Initialize on load
 init();
+
+// Initialize Prism.js syntax highlighting for code blocks
+// Prism is loaded via CDN in index.html
+if (typeof (window as any).Prism !== 'undefined') {
+  (window as any).Prism.highlightAll();
+}
