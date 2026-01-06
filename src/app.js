@@ -530,6 +530,32 @@
             }
         }
 
+        // Copy path to clipboard
+        function copyPath(path) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(path).then(() => {
+                    // Show visual feedback
+                    const codeElements = document.querySelectorAll('.copyable-path');
+                    codeElements.forEach(el => {
+                        if (el.textContent === path) {
+                            const originalBg = el.style.backgroundColor;
+                            el.style.backgroundColor = '#28a745';
+                            el.style.color = 'white';
+                            setTimeout(() => {
+                                el.style.backgroundColor = originalBg;
+                                el.style.color = '';
+                            }, 500);
+                        }
+                    });
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    fallbackCopy(path);
+                });
+            } else {
+                fallbackCopy(path);
+            }
+        }
+
         // Fallback copy method
         function fallbackCopy(text) {
             const textarea = document.createElement('textarea');

@@ -63,12 +63,16 @@
             grid-template-columns: 1fr 1fr;
             gap: 20px;
             padding: 30px;
+            align-items: start;
         }
 
         .panel {
             background: #f8f9fa;
             border-radius: 8px;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
 
         .panel h2 {
@@ -215,12 +219,12 @@
             line-height: 1.6;
             overflow-x: auto;
             white-space: pre;
-            max-height: 400px;
             overflow-y: auto;
             width: 100%;
             border: 2px solid #e0e0e0;
             resize: vertical;
             min-height: 300px;
+            flex: 1;
         }
 
 	        #jsonOutput:focus {
@@ -502,6 +506,17 @@
             font-size: 0.9em;
             color: #d63384;
             border: 1px solid #e0e0e0;
+        }
+
+        .notice-content code.copyable-path {
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .notice-content code.copyable-path:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
         }
 
         .notice-content a {
