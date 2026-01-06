@@ -728,5 +728,18 @@ function importConfig(event: Event): void {
     });
 };
 
+// Expose functions to global scope for inline event handlers
+(window as any).togglePreset = togglePreset;
+(window as any).openAddCustomModal = openAddCustomModal;
+(window as any).closeCustomModal = closeCustomModal;
+(window as any).editCustom = editCustom;
+(window as any).deleteCustom = deleteCustom;
+(window as any).editPreset = editPreset;
+(window as any).updateConnectionTypeFields = updateConnectionTypeFields;
+(window as any).copyToClipboard = copyToClipboard;
+(window as any).exportConfig = exportConfig;
+(window as any).importConfig = importConfig;
+(window as any).saveCustomModal = saveCustomModal;
+
 // Initialize on load
 init();
