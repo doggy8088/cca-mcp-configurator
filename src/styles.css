@@ -496,6 +496,25 @@
             text-decoration: underline;
         }
 
+        .notice-content pre {
+            margin: 15px 0;
+            border-radius: 6px;
+            overflow-x: auto;
+            background: #2d2d2d !important;
+        }
+
+        .notice-content pre code {
+            display: block;
+            padding: 16px;
+            background: transparent;
+            border: none;
+            color: #ccc;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.85em;
+            line-height: 1.5;
+            overflow-x: auto;
+        }
+
         .app-footer a {
             color: #667eea;
             text-decoration: none;
