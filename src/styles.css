@@ -37,6 +37,27 @@
             font-size: 1.1em;
         }
 
+        .course-banner {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px 30px;
+            text-align: center;
+            margin: 0;
+        }
+
+        .course-banner a {
+            color: white;
+            text-decoration: none;
+            font-size: 1.1em;
+            font-weight: 600;
+            display: inline-block;
+            transition: all 0.3s ease;
+        }
+
+        .course-banner a:hover {
+            transform: translateY(-2px);
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+
         .content {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -402,20 +423,35 @@
             display: none;
         }
 
+        .app-notice-section {
+            background: white;
+            padding: 30px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .notice-box {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
         .app-footer {
             border-top: 1px solid #e0e0e0;
             background: #f8f9fa;
-            padding: 20px 30px 14px;
+            padding: 15px 30px;
             color: #666;
             font-size: 0.9em;
         }
 
-        .app-footer__top {
+        .app-footer__bottom {
             display: flex;
             justify-content: space-between;
             align-items: center;
             gap: 20px;
-            margin-bottom: 12px;
         }
 
         .app-footer__left {
@@ -431,24 +467,6 @@
         .app-footer__right {
             flex: 1;
             text-align: right;
-        }
-
-        .app-footer__bottom {
-            text-align: center;
-            padding-top: 8px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .app-footer__notice {
-            margin: 20px 0;
-        }
-
-        .notice-box {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .notice-title {
@@ -565,7 +583,7 @@
         }
 
         @media (max-width: 768px) {
-            .app-footer__top {
+            .app-footer__bottom {
                 flex-direction: column;
                 text-align: center;
                 gap: 10px;
