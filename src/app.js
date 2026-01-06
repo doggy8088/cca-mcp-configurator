@@ -531,19 +531,16 @@
         }
 
         // Copy path to clipboard
-        window.copyPath = function(path) {
+        window.copyPath = function(path, element) {
             if (navigator.clipboard && window.isSecureContext) {
                 navigator.clipboard.writeText(path).then(() => {
-                    // Show visual feedback using event target
-                    const codeElements = document.querySelectorAll('.copyable-path');
-                    codeElements.forEach(el => {
-                        if (el.textContent === path) {
-                            el.classList.add('copied');
-                            setTimeout(() => {
-                                el.classList.remove('copied');
-                            }, 500);
-                        }
-                    });
+                    // Show visual feedback on the clicked element
+                    if (element) {
+                        element.classList.add('copied');
+                        setTimeout(() => {
+                            element.classList.remove('copied');
+                        }, 500);
+                    }
                 }).catch(err => {
                     console.error('Failed to copy:', err);
                     fallbackCopy(path);
