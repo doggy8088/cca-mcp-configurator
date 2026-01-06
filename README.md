@@ -163,10 +163,13 @@ php -S localhost:8080
 
 ## 技術細節
 
-- 使用 **Bun** 建置系統進行程式碼壓縮和優化
-- 使用 `csso` 壓縮 CSS（減少約 49%）
-- 使用 `terser` 壓縮 JavaScript（減少約 56%）  
-- 使用 `html-minifier-terser` 壓縮 HTML（減少約 33%）
+- 使用 **TypeScript** 開發，提供型別安全
+- 使用 **Bun** 建置系統進行程式碼轉譯、壓縮和優化
+- 預設設定獨立於程式碼，存放在 `presets/` 資料夾中的 JSON 檔案
+- 建置時自動合併預設設定並注入到程式碼中
+- 使用 `csso` 壓縮 CSS（減少約 48%）
+- 使用 `terser` 壓縮 JavaScript（減少約 64%）  
+- 使用 `html-minifier-terser` 壓縮 HTML（減少約 28%）
 - 使用 localStorage 進行客戶端資料存儲
 - 響應式設計，支援行動裝置
 - 現代化的使用者介面
@@ -175,11 +178,45 @@ php -S localhost:8080
 
 專案使用 GitHub Actions 進行持續整合和部署：
 
-- **Pull Request**: 自動執行建置測試和驗證
+- **Pull Request**: 自動驗證預設設定格式、執行建置測試和驗證
 - **Push to main**: 自動建置並部署到 GitHub Pages
 - **手動觸發**: 支援手動觸發部署
 
 工作流程檔案：`.github/workflows/ci.yml`
+
+### 新增預設設定
+
+要新增新的 MCP 預設設定，請在 `presets/` 目錄中新增一個 JSON 檔案。檔案名稱必須與 `id` 欄位一致。
+
+範例 (`presets/my-preset.json`)：
+
+```json
+{
+  "id": "my-preset",
+  "name": "My Custom MCP",
+  "description": "這是我的自訂 MCP 設定",
+  "config": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "@my/mcp-server"],
+    "tools": ["*"]
+  }
+}
+```
+
+必要欄位：
+- `id`: 預設設定的唯一識別碼（必須與檔案名稱一致，不含 .json）
+- `name`: 顯示名稱
+- `description`: 說明文字（可使用 HTML）
+- `config`: MCP 伺服器設定
+  - `type`: 連線類型（`stdio`、`http` 或 `sse`）
+  - 其他欄位依連線類型而定
+
+驗證指令：
+
+```bash
+bun run validate:presets
+```
 
 ## 專案結構
 
@@ -188,7 +225,17 @@ cca-mcp-configurator/
 ├── src/               # 原始碼
 │   ├── index.html     # HTML 模板
 │   ├── styles.css     # CSS 樣式
-│   └── app.js         # JavaScript 程式碼
+│   └── app.ts         # TypeScript 程式碼
+├── presets/           # MCP 預設設定
+│   ├── playwright.json
+│   ├── brave-search.json
+│   ├── puppeteer.json
+│   ├── sqlite.json
+│   ├── sequential-thinking.json
+│   ├── memory.json
+│   └── context7.json
+├── scripts/           # 建置腳本
+│   └── merge-presets.ts  # 預設合併與驗證
 ├── dist/              # 建置輸出（自動生成）
 │   ├── index.html     # 壓縮的 HTML
 │   ├── styles.min.css # 壓縮的 CSS
@@ -196,7 +243,8 @@ cca-mcp-configurator/
 ├── .github/
 │   └── workflows/
 │       └── ci.yml     # GitHub Actions 工作流程
-├── build.js           # 建置腳本
+├── build.ts           # 建置腳本
+├── tsconfig.json      # TypeScript 設定
 ├── package.json       # 專案設定
 └── README.md          # 說明文件
 ```
