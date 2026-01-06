@@ -48,7 +48,8 @@ async function build() {
   writeFileSync('dist/styles.min.css', minifiedCSS);
   
   // Write modified TypeScript to a temporary file
-  const tmpFile = '/tmp/app-temp.ts';
+  const tmpDir = process.env.TMPDIR || process.env.TEMP || '/tmp';
+  const tmpFile = `${tmpDir}/app-temp.ts`;
   writeFileSync(tmpFile, ts);
 
   // Transpile TypeScript to JavaScript using Bun

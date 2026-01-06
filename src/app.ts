@@ -32,7 +32,7 @@ interface McpServersOutput {
     mcpServers: Record<string, PresetConfig>;
 }
 
-// Preset configurations (will be replaced during build)
+// Preset configurations (will be replaced during build with actual preset data from presets/ folder)
 const PRESETS: Preset[] = [];
 
 // State management
