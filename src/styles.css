@@ -496,8 +496,42 @@
             text-decoration: underline;
         }
 
-        .notice-content pre {
+        .code-block-wrapper {
+            position: relative;
             margin: 15px 0;
+        }
+
+        .copy-code-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ccc;
+            padding: 6px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            z-index: 10;
+        }
+
+        .copy-code-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: none;
+            box-shadow: none;
+        }
+
+        .copy-code-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .notice-content pre {
+            margin: 0;
             border-radius: 6px;
             overflow-x: auto;
             background: #2d2d2d !important;

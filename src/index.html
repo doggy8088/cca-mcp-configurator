@@ -59,13 +59,20 @@
                 <div class="notice-box">
                     <div class="notice-title">⚠️ 重要提醒：使用 GitHub Copilot Coding Agent (CCA) 前的準備工作</div>
                     <div class="notice-content">
-                        <p>在執行 GitHub Copilot Coding Agent (CCA) 之前，請務必完成以下設定：</p>
+                        <p>在執行 GitHub Copilot Coding Agent (CCA) 之前，建議完成以下設定：</p>
                         <ol>
                             <li>在專案根目錄建立 <code>.github/workflows/copilot-setup-steps.yml</code> 檔案</li>
                             <li>在工作流程中加入中文字型安裝步驟，以確保 CCA 能正確處理中文內容</li>
                         </ol>
                         <p>範例檔案內容如下：</p>
-                        <pre><code class="language-yaml">name: "Copilot Setup Steps"
+                        <div class="code-block-wrapper">
+                            <button class="copy-code-btn" onclick="copyCodeBlock()" title="複製程式碼">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                </svg>
+                            </button>
+                            <pre><code class="language-yaml">name: "Copilot Setup Steps"
 
 # Automatically run the setup steps when they are changed to allow for easy validation, and
 # allow manual testing through the repository's "Actions" tab
@@ -113,6 +120,7 @@ jobs:
 
       # - name: Install JavaScript dependencies
       #   run: npm ci</code></pre>
+                        </div>
                     </div>
                 </div>
             </div>
