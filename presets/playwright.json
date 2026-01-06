@@ -1,0 +1,11 @@
+{
+  "id": "playwright",
+  "name": "Playwright MCP",
+  "description": "瀏覽器自動化工具，可用於網頁測試和互動 (<a href=\"https://github.com/microsoft/playwright-mcp\" target=\"_blank\" rel=\"noopener noreferrer\">官方 Repo</a>)",
+  "config": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["@playwright/mcp@latest", "--viewport-size", "1280x720", "--allowed-hosts", "*"],
+    "tools": ["*"]
+  }
+}

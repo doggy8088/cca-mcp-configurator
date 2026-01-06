@@ -1,0 +1,11 @@
+{
+  "id": "sequential-thinking",
+  "name": "Sequential Thinking MCP",
+  "description": "增強推理能力，支援複雜思考過程",
+  "config": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-sequential-thinking"],
+    "tools": ["*"]
+  }
+}

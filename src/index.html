@@ -1,74 +1,114 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-TW">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="app-version" content="dev">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="app-version" content="dev" />
     <title>GitHub Copilot Coding Agent MCP 設定工具</title>
-    <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg==" crossorigin="anonymous">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js" integrity="sha512-GSqa805Un2LvU+ncwOX06z4FJp/1C6FqzhL0KzXFIXgPe/AHuogTEWElbLNuHz8o1Z3fEKaL+eULbz1WnKYG0A==" crossorigin="anonymous"></script>
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
+      integrity="sha512-vswe+cgvic/XBoF1OcM/TeJ2FW0OofqAVdCZiEYkd6dwGXthvkSFWOoGGJgS2CW70VK5dQM5Oh+7ne47s74VTg=="
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
+      integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg=="
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-yaml.min.js"
+      integrity="sha512-GSqa805Un2LvU+ncwOX06z4FJp/1C6FqzhL0KzXFIXgPe/AHuogTEWElbLNuHz8o1Z3fEKaL+eULbz1WnKYG0A=="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
     <div class="container">
-        <header>
-            <h1>🚀 GitHub Copilot Coding Agent MCP 設定工具</h1>
-            <p>輕鬆管理您的 MCP (Model Context Protocol) 設定</p>
-        </header>
+      <header>
+        <h1>🚀 GitHub Copilot Coding Agent MCP 設定工具</h1>
+        <p>輕鬆管理您的 MCP (Model Context Protocol) 設定</p>
+      </header>
 
-        <!-- Course Promotion Banner -->
-        <div class="course-banner">
-            <a href="https://learn.duotify.com/courses/copilot-cli" target="_blank" rel="noopener noreferrer">
-                📚 掌握 AI 驅動的終端機：GitHub Copilot CLI 深度實戰
-            </a>
+      <!-- Course Promotion Banner -->
+      <div class="course-banner">
+        <a
+          href="https://learn.duotify.com/courses/copilot-cli"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          📚 掌握 AI 驅動的終端機：GitHub Copilot CLI 深度實戰
+        </a>
+      </div>
+
+      <div class="content">
+        <!-- Left Panel: Presets and Custom Configs -->
+        <div class="panel">
+          <h2>預設範本</h2>
+          <div id="presetList"></div>
+
+          <div class="custom-section">
+            <h2>自訂設定</h2>
+            <button onclick="openAddCustomModal()">+ 新增自訂設定</button>
+            <div id="customList" style="margin-top: 15px"></div>
+          </div>
         </div>
 
-        <div class="content">
-            <!-- Left Panel: Presets and Custom Configs -->
-            <div class="panel">
-                <h2>預設範本</h2>
-                <div id="presetList"></div>
-
-                <div class="custom-section">
-                    <h2>自訂設定</h2>
-                    <button onclick="openAddCustomModal()">+ 新增自訂設定</button>
-                    <div id="customList" style="margin-top: 15px;"></div>
-                </div>
-            </div>
-
-            <!-- Right Panel: JSON Output -->
-	            <div class="panel">
-	                <h2>MCP 設定 (JSON)</h2>
-	                <textarea id="jsonOutput" spellcheck="false"></textarea>
-	                <div class="actions actions-center">
-	                    <button onclick="copyToClipboard()">📋 複製到剪貼簿</button>
-	                    <button onclick="exportConfig()" class="secondary">💾 匯出設定</button>
-	                    <button onclick="document.getElementById('importFile').click()" class="secondary">📂 匯入設定</button>
-	                    <input type="file" id="importFile" accept=".json" onchange="importConfig(event)">
-	                </div>
-	            </div>
+        <!-- Right Panel: JSON Output -->
+        <div class="panel">
+          <h2>MCP 設定 (JSON)</h2>
+          <textarea id="jsonOutput" spellcheck="false"></textarea>
+          <div class="actions actions-center">
+            <button onclick="copyToClipboard()">📋 複製到剪貼簿</button>
+            <button onclick="exportConfig()" class="secondary">💾 匯出設定</button>
+            <button onclick="document.getElementById('importFile').click()" class="secondary">
+              📂 匯入設定
+            </button>
+            <input type="file" id="importFile" accept=".json" onchange="importConfig(event)" />
+          </div>
         </div>
+      </div>
 
-        <!-- Important Notice Section -->
-        <div class="app-notice-section">
-            <div class="notice-box">
-                <div class="notice-title">⚠️ 重要提醒：使用 GitHub Copilot Coding Agent (CCA) 前的準備工作</div>
-                <div class="notice-content">
-                    <p>在執行 GitHub Copilot Coding Agent (CCA) 之前，建議完成以下設定：</p>
-                    <ol>
-                        <li>在專案根目錄建立 <code class="copyable-path" onclick="copyPath('.github/workflows/copilot-setup-steps.yml', this)" title="點擊複製路徑">.github/workflows/copilot-setup-steps.yml</code> 檔案</li>
-                        <li>在工作流程中加入中文字型安裝步驟，以確保 CCA 能正確處理中文內容</li>
-                    </ol>
-                    <p>範例檔案內容如下：</p>
-                    <div class="code-block-wrapper">
-                        <button class="copy-code-btn" onclick="copyCodeBlock()" title="複製程式碼">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                            </svg>
-                        </button>
-                        <pre><code class="language-yaml">name: "Copilot Setup Steps"
+      <!-- Important Notice Section -->
+      <div class="app-notice-section">
+        <div class="notice-box">
+          <div class="notice-title">
+            ⚠️ 重要提醒：使用 GitHub Copilot Coding Agent (CCA) 前的準備工作
+          </div>
+          <div class="notice-content">
+            <p>在執行 GitHub Copilot Coding Agent (CCA) 之前，建議完成以下設定：</p>
+            <ol>
+              <li>
+                在專案根目錄建立
+                <code
+                  class="copyable-path"
+                  onclick="copyPath('.github/workflows/copilot-setup-steps.yml', this)"
+                  title="點擊複製路徑"
+                  >.github/workflows/copilot-setup-steps.yml</code
+                >
+                檔案
+              </li>
+              <li>在工作流程中加入中文字型安裝步驟，以確保 CCA 能正確處理中文內容</li>
+            </ol>
+            <p>範例檔案內容如下：</p>
+            <div class="code-block-wrapper">
+              <button class="copy-code-btn" onclick="copyCodeBlock()" title="複製程式碼">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                  <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                </svg>
+              </button>
+              <pre><code class="language-yaml">name: "Copilot Setup Steps"
 
 # Automatically run the setup steps when they are changed to allow for easy validation, and
 # allow manual testing through the repository's "Actions" tab
@@ -116,121 +156,178 @@ jobs:
 
       # - name: Install JavaScript dependencies
       #   run: npm ci</code></pre>
-                    </div>
-                </div>
             </div>
+          </div>
         </div>
+      </div>
 
-        <!-- Footer -->
-        <footer class="app-footer">
-            <div class="app-footer__bottom">
-                <div class="app-footer__left">
-                    <span id="appVersion" class="app-footer__version" aria-label="版本號"></span>
-                    <a href="https://github.com/doggy8088/cca-mcp-configurator" target="_blank" rel="noopener noreferrer" class="app-footer__github-link" aria-label="GitHub Repository" title="前往 GitHub 專案">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="app-footer__github-icon">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                    </a>
-                </div>
-                <div class="app-footer__center">
-                    <span>Copyright © 2026 Will 保哥</span>
-                </div>
-                <div class="app-footer__right">
-                    <a href="https://www.facebook.com/will.fans/" target="_blank" rel="noopener noreferrer">Will 保哥的技術交流中心</a>
-                </div>
-            </div>
-        </footer>
+      <!-- Footer -->
+      <footer class="app-footer">
+        <div class="app-footer__bottom">
+          <div class="app-footer__left">
+            <span id="appVersion" class="app-footer__version" aria-label="版本號"></span>
+            <a
+              href="https://github.com/doggy8088/cca-mcp-configurator"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="app-footer__github-link"
+              aria-label="GitHub Repository"
+              title="前往 GitHub 專案"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="app-footer__github-icon"
+              >
+                <path
+                  d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                />
+              </svg>
+            </a>
+          </div>
+          <div class="app-footer__center">
+            <span>Copyright © 2026 Will 保哥</span>
+          </div>
+          <div class="app-footer__right">
+            <a href="https://www.facebook.com/will.fans/" target="_blank" rel="noopener noreferrer"
+              >Will 保哥的技術交流中心</a
+            >
+          </div>
+        </div>
+      </footer>
     </div>
 
-	    <!-- Add/Edit Custom Modal -->
-	    <div id="customModal" class="modal">
-	        <div class="modal-content modal-content-large">
-	            <div class="modal-header">
-	                <h3 id="modalTitle">新增自訂設定</h3>
-	            </div>
-	            <form id="customForm">
-	                <div class="modal-body">
-	                    <div class="form-group">
-	                        <label for="customName">名稱 *</label>
-	                        <input type="text" id="customName" required placeholder="例如: my-custom-server">
-	                    </div>
-	                    <div class="form-group">
-	                        <label for="customDescription">描述</label>
-	                        <input type="text" id="customDescription" placeholder="簡短描述此設定的用途">
-	                    </div>
-	                    <div class="form-group">
-	                        <label>連線類型 *</label>
-	                        <div class="radio-group">
-	                            <label class="radio-label">
-	                                <input type="radio" name="connectionType" value="stdio" checked onchange="updateConnectionTypeFields()">
-	                                <span>STDIO</span>
-	                            </label>
-	                            <label class="radio-label">
-	                                <input type="radio" name="connectionType" value="http" onchange="updateConnectionTypeFields()">
-	                                <span>HTTP</span>
-	                            </label>
-	                            <label class="radio-label">
-	                                <input type="radio" name="connectionType" value="sse" onchange="updateConnectionTypeFields()">
-	                                <span>SSE</span>
-	                            </label>
-	                        </div>
-	                    </div>
-	
-	                    <!-- STDIO fields -->
-	                    <div id="stdioFields" class="connection-fields">
-	                        <div class="form-group">
-	                            <label for="stdioCommand">命令 *</label>
-	                            <input type="text" id="stdioCommand" placeholder="例如: npx, node, python">
-	                        </div>
-	                        <div class="form-group">
-	                            <label for="stdioArgs">參數 (每行一個)</label>
-	                            <textarea id="stdioArgs" rows="3" placeholder="例如:&#10;-y&#10;@modelcontextprotocol/server-memory"></textarea>
-	                        </div>
-	                        <div class="form-group">
-	                            <label for="stdioEnv">環境變數 (JSON 格式，選填)</label>
-	                            <textarea id="stdioEnv" rows="3" placeholder='{&#10;  "API_KEY": "your-api-key"&#10;}'></textarea>
-	                        </div>
-	                    </div>
-	
-	                    <!-- HTTP fields -->
-	                    <div id="httpFields" class="connection-fields" style="display: none;">
-	                        <div class="form-group">
-	                            <label for="httpUrl">URL *</label>
-	                            <input type="url" id="httpUrl" placeholder="例如: http://localhost:3000">
-	                        </div>
-	                        <div class="form-group">
-	                            <label for="httpHeaders">HTTP Headers (JSON 格式，選填)</label>
-	                            <textarea id="httpHeaders" rows="3" placeholder='{&#10;  "Authorization": "Bearer token"&#10;}'></textarea>
-	                        </div>
-	                    </div>
-	
-	                    <!-- SSE fields -->
-	                    <div id="sseFields" class="connection-fields" style="display: none;">
-	                        <div class="form-group">
-	                            <label for="sseUrl">URL *</label>
-	                            <input type="url" id="sseUrl" placeholder="例如: http://localhost:3000/sse">
-	                        </div>
-	                        <div class="form-group">
-	                            <label for="sseHeaders">HTTP Headers (JSON 格式，選填)</label>
-	                            <textarea id="sseHeaders" rows="3" placeholder='{&#10;  "Authorization": "Bearer token"&#10;}'></textarea>
-	                        </div>
-	                    </div>
-	
-	                    <div class="form-group">
-	                        <label for="customTools">工具 (Tools)</label>
-	                        <input type="text" id="customTools" value='["*"]' placeholder='["*"] 或具體工具名稱'>
-	                        <small style="color: #666; display: block; margin-top: 5px;">使用 ["*"] 表示所有工具，或指定特定工具名稱</small>
-	                    </div>
-	                </div>
-	
-	                <div class="modal-actions">
-	                    <button type="button" onclick="closeCustomModal()" class="secondary">取消</button>
-	                    <button type="submit">儲存</button>
-	                </div>
-	            </form>
-	        </div>
-	    </div>
+    <!-- Add/Edit Custom Modal -->
+    <div id="customModal" class="modal">
+      <div class="modal-content modal-content-large">
+        <div class="modal-header">
+          <h3 id="modalTitle">新增自訂設定</h3>
+        </div>
+        <form id="customForm">
+          <div class="modal-body">
+            <div class="form-group">
+              <label for="customName">名稱 *</label>
+              <input type="text" id="customName" required placeholder="例如: my-custom-server" />
+            </div>
+            <div class="form-group">
+              <label for="customDescription">描述</label>
+              <input type="text" id="customDescription" placeholder="簡短描述此設定的用途" />
+            </div>
+            <div class="form-group">
+              <label>連線類型 *</label>
+              <div class="radio-group">
+                <label class="radio-label">
+                  <input
+                    type="radio"
+                    name="connectionType"
+                    value="stdio"
+                    checked
+                    onchange="updateConnectionTypeFields()"
+                  />
+                  <span>STDIO</span>
+                </label>
+                <label class="radio-label">
+                  <input
+                    type="radio"
+                    name="connectionType"
+                    value="http"
+                    onchange="updateConnectionTypeFields()"
+                  />
+                  <span>HTTP</span>
+                </label>
+                <label class="radio-label">
+                  <input
+                    type="radio"
+                    name="connectionType"
+                    value="sse"
+                    onchange="updateConnectionTypeFields()"
+                  />
+                  <span>SSE</span>
+                </label>
+              </div>
+            </div>
 
-    <script src="app.js"></script>
-</body>
+            <!-- STDIO fields -->
+            <div id="stdioFields" class="connection-fields">
+              <div class="form-group">
+                <label for="stdioCommand">命令 *</label>
+                <input type="text" id="stdioCommand" placeholder="例如: npx, node, python" />
+              </div>
+              <div class="form-group">
+                <label for="stdioArgs">參數 (每行一個)</label>
+                <textarea
+                  id="stdioArgs"
+                  rows="3"
+                  placeholder="例如:&#10;-y&#10;@modelcontextprotocol/server-memory"
+                ></textarea>
+              </div>
+              <div class="form-group">
+                <label for="stdioEnv">環境變數 (JSON 格式，選填)</label>
+                <textarea
+                  id="stdioEnv"
+                  rows="3"
+                  placeholder='{&#10;  "API_KEY": "your-api-key"&#10;}'
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- HTTP fields -->
+            <div id="httpFields" class="connection-fields" style="display: none">
+              <div class="form-group">
+                <label for="httpUrl">URL *</label>
+                <input type="url" id="httpUrl" placeholder="例如: http://localhost:3000" />
+              </div>
+              <div class="form-group">
+                <label for="httpHeaders">HTTP Headers (JSON 格式，選填)</label>
+                <textarea
+                  id="httpHeaders"
+                  rows="3"
+                  placeholder='{&#10;  "Authorization": "Bearer token"&#10;}'
+                ></textarea>
+              </div>
+            </div>
+
+            <!-- SSE fields -->
+            <div id="sseFields" class="connection-fields" style="display: none">
+              <div class="form-group">
+                <label for="sseUrl">URL *</label>
+                <input type="url" id="sseUrl" placeholder="例如: http://localhost:3000/sse" />
+              </div>
+              <div class="form-group">
+                <label for="sseHeaders">HTTP Headers (JSON 格式，選填)</label>
+                <textarea
+                  id="sseHeaders"
+                  rows="3"
+                  placeholder='{&#10;  "Authorization": "Bearer token"&#10;}'
+                ></textarea>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="customTools">工具 (Tools)</label>
+              <input
+                type="text"
+                id="customTools"
+                value='["*"]'
+                placeholder='["*"] 或具體工具名稱'
+              />
+              <small style="color: #666; display: block; margin-top: 5px"
+                >使用 ["*"] 表示所有工具，或指定特定工具名稱</small
+              >
+            </div>
+          </div>
+
+          <div class="modal-actions">
+            <button type="button" onclick="closeCustomModal()" class="secondary">取消</button>
+            <button type="submit">儲存</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <script src="app.ts"></script>
+  </body>
 </html>
