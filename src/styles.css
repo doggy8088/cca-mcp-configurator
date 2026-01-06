@@ -582,6 +582,26 @@
             font-size: 0.9em;
         }
 
+        .app-footer__github-link {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 8px;
+            color: #666;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            vertical-align: middle;
+        }
+
+        .app-footer__github-link:hover {
+            color: #333;
+            text-decoration: none;
+        }
+
+        .app-footer__github-icon {
+            width: 16px;
+            height: 16px;
+        }
+
         @media (max-width: 768px) {
             .app-footer__bottom {
                 flex-direction: column;
