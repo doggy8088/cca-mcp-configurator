@@ -530,6 +530,26 @@
             }
         }
 
+        // Copy path to clipboard
+        window.copyPath = function(path, element) {
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(path).then(() => {
+                    // Show visual feedback on the clicked element
+                    if (element) {
+                        element.classList.add('copied');
+                        setTimeout(() => {
+                            element.classList.remove('copied');
+                        }, 500);
+                    }
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    fallbackCopy(path);
+                });
+            } else {
+                fallbackCopy(path);
+            }
+        }
+
         // Fallback copy method
         function fallbackCopy(text) {
             const textarea = document.createElement('textarea');
