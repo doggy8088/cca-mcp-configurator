@@ -5,12 +5,14 @@
   "scripts": {
     "build": "bun run build:clean && bun run build:minify",
     "build:clean": "rm -rf dist && mkdir -p dist",
-    "build:minify": "bun build.js",
+    "build:minify": "bun run build.ts",
     "test": "bun run build && bun -e \"console.log('Build test passed')\"",
     "serve": "bun --bun x http-server dist -p 8080",
-    "dev": "bun --bun x http-server src -p 8080"
+    "dev": "bun --bun x http-server src -p 8080",
+    "validate:presets": "bun run scripts/merge-presets.ts"
   },
   "devDependencies": {
+    "@types/bun": "latest",
     "csso": "^5.0.5",
     "html-minifier-terser": "^7.2.0",
     "terser": "^5.36.0"

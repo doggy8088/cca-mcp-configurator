@@ -1,0 +1,11 @@
+{
+  "id": "memory",
+  "name": "Memory MCP",
+  "description": "持久化記憶，跨對話保存資訊",
+  "config": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-memory"],
+    "tools": ["*"]
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "id": "puppeteer",
+  "name": "Puppeteer MCP",
+  "description": "另一個瀏覽器自動化工具，基於 Chrome",
+  "config": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-puppeteer"],
+    "tools": ["*"]
+  }
+}

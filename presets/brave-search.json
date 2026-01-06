@@ -1,0 +1,14 @@
+{
+  "id": "brave-search",
+  "name": "Brave Search MCP",
+  "description": "網路搜尋功能，使用 Brave Search API",
+  "config": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-brave-search"],
+    "env": {
+      "BRAVE_API_KEY": "<YOUR_API_KEY>"
+    },
+    "tools": ["*"]
+  }
+}

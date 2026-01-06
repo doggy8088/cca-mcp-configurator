@@ -1,0 +1,11 @@
+{
+  "id": "sqlite",
+  "name": "SQLite MCP",
+  "description": "SQLite 資料庫操作",
+  "config": {
+    "type": "stdio",
+    "command": "npx",
+    "args": ["-y", "@modelcontextprotocol/server-sqlite", "/path/to/database.db"],
+    "tools": ["*"]
+  }
+}
