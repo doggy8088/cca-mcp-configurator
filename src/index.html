@@ -79,20 +79,41 @@
             <p>在執行 GitHub Copilot Coding Agent (CCA) 之前，建議完成以下設定：</p>
             <ol>
               <li>
-                在專案根目錄建立
-                <code
-                  class="copyable-path"
-                  onclick="copyPath('.github/workflows/copilot-setup-steps.yml', this)"
-                  title="點擊複製路徑"
-                  >.github/workflows/copilot-setup-steps.yml</code
-                >
-                檔案
+                <div class="notice-item-with-action">
+                  <span>
+                    在專案根目錄建立
+                    <code
+                      class="copyable-path"
+                      onclick="copyPath('.github/workflows/copilot-setup-steps.yml', this)"
+                      title="點擊複製路徑"
+                      >.github/workflows/copilot-setup-steps.yml</code
+                    >
+                    檔案
+                  </span>
+                  <button
+                    type="button"
+                    class="notice-copy-path-btn secondary small"
+                    onclick="copyPath('.github/workflows/copilot-setup-steps.yml', this)"
+                  >
+                    複製路徑
+                  </button>
+                </div>
               </li>
-              <li>在工作流程中加入中文字型安裝步驟，以確保 CCA 能正確處理中文內容</li>
+              <li>
+                <div class="notice-item-with-action">
+                  <span>在工作流程中加入中文字型安裝步驟，以確保 CCA 能正確處理中文內容</span>
+                  <button
+                    type="button"
+                    class="notice-copy-sample-btn secondary small"
+                    onclick="copyCodeBlock(this)"
+                  >
+                    複製範例內容
+                  </button>
+                </div>
+              </li>
             </ol>
-            <p>範例檔案內容如下：</p>
             <div class="code-block-wrapper">
-              <button class="copy-code-btn" onclick="copyCodeBlock()" title="複製程式碼">
+              <button class="copy-code-btn" onclick="copyCodeBlock(this)" title="複製程式碼">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"

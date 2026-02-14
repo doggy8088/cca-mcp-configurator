@@ -596,24 +596,39 @@ function copyToClipboard(): void {
 
 // Copy path to clipboard
 (window as any).copyPath = function (path: string, element: HTMLElement): void {
+  const showCopySuccess = (): void => {
+    if (!element) {
+      return;
+    }
+
+    const isPathButton = element.classList.contains('notice-copy-path-btn');
+    if (isPathButton) {
+      const originalContent = element.dataset.originalContent || element.textContent || '複製路徑';
+      element.dataset.originalContent = originalContent;
+      element.textContent = '已複製';
+    }
+
+    element.classList.add('copied');
+    setTimeout(() => {
+      element.classList.remove('copied');
+      if (isPathButton) {
+        element.textContent = element.dataset.originalContent || '複製路徑';
+      }
+    }, 1200);
+  };
+
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard
       .writeText(path)
-      .then(() => {
-        // Show visual feedback on the clicked element
-        if (element) {
-          element.classList.add('copied');
-          setTimeout(() => {
-            element.classList.remove('copied');
-          }, 500);
-        }
-      })
+      .then(showCopySuccess)
       .catch((err) => {
         console.error('Failed to copy:', err);
         fallbackCopy(path);
+        showCopySuccess();
       });
   } else {
     fallbackCopy(path);
+    showCopySuccess();
   }
 };
 
@@ -713,7 +728,7 @@ function importConfig(event: Event): void {
 }
 
 // Copy code block content
-(window as any).copyCodeBlock = function (): void {
+(window as any).copyCodeBlock = function (triggerButton?: HTMLElement): void {
   const codeBlock = document.querySelector('.notice-content pre code');
   if (!codeBlock) {
     console.error('Code block not found');
@@ -721,35 +736,50 @@ function importConfig(event: Event): void {
   }
 
   const text = codeBlock.textContent || '';
+  const feedbackButton =
+    triggerButton || (document.querySelector('.copy-code-btn') as HTMLElement | null);
 
-  navigator.clipboard
-    .writeText(text)
-    .then(() => {
-      const btn = document.querySelector('.copy-code-btn') as HTMLElement;
-      if (!btn) {
-        console.error('Copy button not found');
-        return;
-      }
+  const showCopySuccess = (): void => {
+    if (!feedbackButton) {
+      return;
+    }
 
-      const originalHTML = btn.innerHTML;
+    const originalHTML = feedbackButton.dataset.originalContent || feedbackButton.innerHTML;
+    feedbackButton.dataset.originalContent = originalHTML;
 
-      // Show success feedback
-      btn.innerHTML = `
+    if (feedbackButton.classList.contains('notice-copy-sample-btn')) {
+      feedbackButton.textContent = '已複製';
+    } else {
+      feedbackButton.innerHTML = `
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <polyline points="20 6 9 17 4 12"></polyline>
             </svg>
         `;
-      btn.style.color = '#28a745';
+      feedbackButton.style.color = '#28a745';
+    }
+    feedbackButton.classList.add('is-copied');
 
-      setTimeout(() => {
-        btn.innerHTML = originalHTML;
-        btn.style.color = '';
-      }, 2000);
-    })
-    .catch((err) => {
-      console.error('Failed to copy:', err);
-      alert('複製失敗，請手動複製');
-    });
+    setTimeout(() => {
+      feedbackButton.innerHTML = originalHTML;
+      feedbackButton.style.color = '';
+      feedbackButton.classList.remove('is-copied');
+    }, 2000);
+  };
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard
+      .writeText(text)
+      .then(showCopySuccess)
+      .catch((err) => {
+        console.error('Failed to copy with Clipboard API:', err);
+        fallbackCopy(text);
+        showCopySuccess();
+      });
+    return;
+  }
+
+  fallbackCopy(text);
+  showCopySuccess();
 };
 
 // Expose functions to global scope for inline event handlers
