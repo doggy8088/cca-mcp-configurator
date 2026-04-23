@@ -1,6 +1,6 @@
-# GitHub Copilot MCP Configurator
+# GitHub Copilot Coding Agent (CCA) MCP Configurator
 
-一個簡單易用的網頁工具，用於管理 GitHub Copilot 的 MCP (Model Context Protocol) 設定。
+一個簡單易用的網頁工具，用於管理 GitHub Copilot Coding Agent 的 MCP (Model Context Protocol) 設定。
 
 ![MCP Configurator](https://github.com/doggy8088/cca-mcp-configurator/raw/main/docs/images/mcp-configurator.png)
 
